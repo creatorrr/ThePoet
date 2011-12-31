@@ -16,12 +16,12 @@ html, body {
 	margin: 0;
 	overflow: hidden;
 	
-	font-family: 'Architects Daughter', 'Arial Narrow' , sans-serif;
-	font-size: 36px;
-	font-weight: 200;
+	font-family: Raleway, 'Arial Narrow' , sans-serif;
+	font-size: 32px;
+	font-weight: 400;
 	letter-spacing: -0.02em;
 	
-	color: #eee;
+	color: #222;
 	
 	width: 100%;
 	height: 100%;
@@ -30,13 +30,13 @@ html, body {
 }
 
 html {
-	background: #555a5f;
-	background: -moz-radial-gradient(center, ellipse cover, #555a5f 0%, #1c1e20 100%);
-	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#555a5f), color-stop(100%,#1c1e20));
-	background: -webkit-radial-gradient(center, ellipse cover, #555a5f 0%,#1c1e20 100%);
-	background: -o-radial-gradient(center, ellipse cover, #555a5f 0%,#1c1e20 100%);
-	background: -ms-radial-gradient(center, ellipse cover, #555a5f 0%,#1c1e20 100%);
-	background: radial-gradient(center, ellipse cover, #555a5f 0%,#1c1e20 100%);
+	background: #eeeeff;
+	background: -moz-radial-gradient(center, ellipse cover, #eeeeff 0%, #ccccdd 100%);
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#eeeeff), color-stop(100%,#ccccdd));
+	background: -webkit-radial-gradient(center, ellipse cover, #eeeeff 0%,#ccccdd 100%);
+	background: -o-radial-gradient(center, ellipse cover, #eeeeff 0%,#ccccdd 100%);
+	background: -ms-radial-gradient(center, ellipse cover, #eeeeff 0%,#ccccdd 100%);
+	background: radial-gradient(center, ellipse cover, #eeeeff 0%,#ccccdd 100%);
 }
 
 /*********************************************
@@ -48,18 +48,18 @@ html {
 #reveal h4 {
 	margin: 0 0 20px 0;
 	
-	color: #eee;
+	color: #333;
 	
-	font-family: 'League Gothic', sans-serif;
+	font-family: 'Alfa Slab One', sans-serif;
 	line-height: 0.9em;
-	letter-spacing: 0.02em;
+	letter-spacing: -0.02em;
 	
 	text-transform: uppercase;
 	text-shadow: 0px 0px 6px rgba(0,0,0,0.2);
 }
 
-#reveal h1 { font-size: 136px; 	}
-#reveal h2 { font-size: 76px;	}
+#reveal h1 { font-size: 130px; 	}
+#reveal h2 { font-size: 70px;	}
 #reveal h3 { font-size: 56px;	}
 #reveal h4 { font-size: 36px;	}
 
