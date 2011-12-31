@@ -39,6 +39,17 @@ html {
 	background: radial-gradient(center, ellipse cover, #eeeeff 0%,#ccccdd 100%);
 }
 
+hr{
+border: 0;
+color: #777;
+width: 40%;
+display: block;
+height: o;
+border-top: 2.4px dotted #bbb;
+margin: 1.6em auto;
+padding: 0;
+}
+
 /*********************************************
  * HEADERS
  *********************************************/
@@ -120,7 +131,10 @@ html {
 
 #reveal em, 
 #reveal i {
+	line-height:1.3em;
 	font-style: italic;
+	border-bottom: 1px dotted #333;
+	text-align: left;
 }
 
 #reveal ol, 
@@ -153,7 +167,7 @@ html {
 	
 	font-style: italic;
 	background: rgba(255, 255, 255, 0.05);
-	box-shadow: 0px 0px 2px rgba(0,0,0,0.2);
+	border-top: 2px solid rgba(0,0,0,0.2);
 }
 	#reveal blockquote:before {
 		content: '“';
@@ -210,11 +224,7 @@ html {
 }
 	
 	#reveal a:not(.image):hover {
-		color: hsl(185, 85%, 70%);
-		background: hsla(185, 25%, 20%, 0.4);
-		text-shadow: none;
-		border: none;
-		border-radius: 2px;
+		border-bottom: 1px dotted #5de048;
 	}
 
 #reveal section img {
@@ -255,18 +265,18 @@ html {
 	width: 100px;
 	height: 100px;
 
-	right: 0;
-	bottom: 0;
+	right: 0em;
+	bottom: 0.5em;
 }
 	
 	#reveal .controls a {
-		font-size: 30px;
+		font-size: 38px;
 		position: absolute;
-		opacity: 0.1;
+		opacity: 0.2;
 		color: #fff;
 	}
 		#reveal .controls a.enabled {
-			opacity: 0.6;
+			opacity: 0.8;
 			color: hsl(185, 85%, 70%);
 
 			text-shadow: 0px 0px 2px hsla(185, 45%, 70%, 0.3);
@@ -811,6 +821,8 @@ html {
 #reveal.neon a:hover,
 #reveal.neon .controls a.enabled {
 	color: #5de048;
+	font-weight:bold;
+	margin-top:0.4em;
 }
 
 #reveal.neon .progress span,
@@ -860,4 +872,73 @@ html {
 	padding: 0;
 }
 
-
+#triangle-down {
+	opacity:0.8;
+	margin: auto;
+	margin-top: 1.2em;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-top: 50px solid #5de048;
+}
+#triangle-up {
+	opacity:0.8;
+	margin: auto;
+	margin-top: 1.2em;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 40px solid #5de048;
+}
+#star-five {
+	opacity:0.8;
+   margin: 50px auto 0;
+   position: relative;
+   display: block;
+   color: red;
+   width: 0px;
+   height: 0px;
+   border-right:  100px solid transparent;
+   border-bottom: 70px  solid #5de048;
+   border-left:   100px solid transparent;
+   -moz-transform:    rotate(35deg);
+   -webkit-transform: rotate(35deg);
+   -ms-transform:     rotate(35deg);
+   -o-transform:      rotate(35deg);
+}
+#star-five:before {
+   border-bottom: 80px solid #5de048;
+   border-left: 30px solid transparent;
+   border-right: 30px solid transparent;
+   position: absolute;
+   height: 0;
+   width: 0;
+   top: -45px;
+   left: -65px;
+   display: block;
+   content: '';
+   -webkit-transform: rotate(-35deg);
+   -moz-transform:    rotate(-35deg);
+   -ms-transform:     rotate(-35deg);
+   -o-transform:      rotate(-35deg);
+   
+}
+#star-five:after {
+   position: absolute;
+   display: block;
+   color: #5de048;
+   top: 3px;
+   left: -105px;
+   width: 0px;
+   height: 0px;
+   border-right: 100px solid transparent;
+   border-bottom: 70px solid #5de048;
+   border-left: 100px solid transparent;
+   -webkit-transform: rotate(-70deg);
+   -moz-transform:    rotate(-70deg);
+   -ms-transform:     rotate(-70deg);
+   -o-transform:      rotate(-70deg);
+   content: '';
+}
