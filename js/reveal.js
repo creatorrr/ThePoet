@@ -18,10 +18,8 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *
  * 
  * #############################################################################
- * 
  *
  * Reveal.js is an easy to use HTML based slideshow enhanced by 
  * sexy CSS 3D transforms.
@@ -36,43 +34,6 @@
  * - Reveal.navigateRight();
  * - Reveal.navigateUp();
  * - Reveal.navigateDown();
- * 
- * 
- * version 0.1:
- * - First release
- * 
- * version 0.2:		
- * - Refactored code and added inline documentation
- * - Slides now have unique URL's
- * - A basic API to invoke navigation was added
- * 
- * version 0.3:		
- * - Added licensing terms
- * - Fixed broken links on touch devices
- * 
- * version 1.0:
- * - Added controls
- * - Added initialization options
- * - Reveal views in fragments
- * - Revamped, darker, theme
- * - Tweaked markup styles (a, em, strong, b, i, blockquote, q, pre, ul, ol)
- * - Support for themes at initialization (default/linear/concave)
- * - Code highlighting via highlight.js
- * 
- * version 1.1:
- * - Optional progress bar UI element
- * - Slide overview available via SPACE
- * - Added 'transition' option for specifying transition styles
- * - Added 'theme' option for specifying UI styles
- * - Slides that contain nested-slides are given the 'stack' class
- * 
- * version 1.2:
- * - Big changes to DOM structure:
- *   - Previous #main wrapper is now called #reveal
- *   - Slides were moved one level deeper, into #reveal .slides
- *   - Controls and progress bar were moved into #reveal
- * - All CSS is now much more explicit, rooted at #reveal, to prevent conflicts
- * 
  * 	
  * @author Hakim El Hattab | http://hakim.se
  * @version 1.2
@@ -86,13 +47,16 @@ var Reveal = (function(){
 		indexh = 0,
 		indexv = 0,
 
-		// Configurations options, including;
-		// > {Boolean} controls
-		// > {Boolean} progress
-		// > {String} theme
-		// > {String} transition
-		// > {Boolean} rollingLinks
-		config = {},
+		// Configurations options, can be overridden at initialization time 
+		config = {
+			controls: false,
+			progress: false,
+			history: false,
+			transition: 'default',
+			theme: 'default',
+			mouseWheel: true,
+			rollingLinks: true
+		},
 
 		// Cached references to DOM elements
 		dom = {},
@@ -101,13 +65,31 @@ var Reveal = (function(){
 		supports3DTransforms =  document.body.style['perspectiveProperty'] !== undefined ||
 								document.body.style['WebkitPerspective'] !== undefined || 
                         		document.body.style['MozPerspective'] !== undefined ||
-                        		document.body.style['msTransform'] !== undefined;
+                        		document.body.style['msPerspective'] !== undefined,
+        
+        supports2DTransforms =  document.body.style['transformProperty'] !== undefined ||
+								document.body.style['WebkitTransform'] !== undefined || 
+                        		document.body.style['MozTransform'] !== undefined ||
+                        		document.body.style['msTransform'] !== undefined ||
+                        		document.body.style['OTransform'] !== undefined,
+		
+		// Throttles mouse wheel navigation
+		mouseWheelTimeout = 0;
 	
 	/**
 	 * Starts up the slideshow by applying configuration
 	 * options and binding various events.
 	 */
 	function initialize( options ) {
+		
+		if( !supports2DTransforms && !supports3DTransforms ) {
+			document.body.setAttribute( 'class', 'no-transforms' );
+
+			// If the browser doesn't support transforms we won't be 
+			// using JavaScript to control the presentation
+			return;
+		}
+
 		// Cache references to DOM elements
 		dom.wrapper = document.querySelector( '#reveal' );
 		dom.progress = document.querySelector( '#reveal .progress' );
@@ -127,15 +109,8 @@ var Reveal = (function(){
 		dom.controlsUp.addEventListener('click', preventAndForward( navigateUp ), false);
 		dom.controlsDown.addEventListener('click', preventAndForward( navigateDown ), false);
 
-		// Fall back on default options
-		config.rollingLinks = options.rollingLinks === undefined ? true : options.rollingLinks;
-		config.controls = options.controls === undefined ? false : options.controls;
-		config.progress = options.progress === undefined ? false : options.progress;
-		config.transition = options.transition === undefined ? 'default' : options.transition;
-		config.theme = options.theme === undefined ? 'default' : options.theme;
-
-		// Transition alias
-		if( config.transition === 'box' ) config.transition = 'cube';
+		// Copy options over to our config object
+		extend( config, options );
 
 		// Fall back on the 2D transform theme 'linear'
 		if( supports3DTransforms === false ) {
@@ -158,6 +133,11 @@ var Reveal = (function(){
 			dom.wrapper.classList.add( config.theme );
 		}
 
+		if( config.mouseWheel ) {
+			document.addEventListener('DOMMouseScroll', onDocumentMouseScroll, false); // FF
+			document.addEventListener('mousewheel', onDocumentMouseScroll, false);
+		}
+
 		if( config.rollingLinks ) {
 			// Add some 3D magic to our anchors
 			linkify();
@@ -165,6 +145,16 @@ var Reveal = (function(){
 
 		// Read the initial hash
 		readURL();
+	}
+
+	/**
+	 * Extend object a with the properties of object b. 
+	 * If there's a conflict, object b takes precedence.
+	 */
+	function extend( a, b ) {
+		for( var i in b ) {
+			a[ i ] = b[ i ];
+		}
 	}
 
 	/**
@@ -213,6 +203,8 @@ var Reveal = (function(){
 				else {
 					activateOverview();
 				}
+
+				event.preventDefault();
 			}
 		}
 	}
@@ -263,6 +255,24 @@ var Reveal = (function(){
 			slide();
 		}
 	}
+
+	/**
+	 * Handles mouse wheel scrolling, throttled to avoid 
+	 * skipping multiple slides.
+	 */
+	function onDocumentMouseScroll( event ){
+		clearTimeout( mouseWheelTimeout );
+
+		mouseWheelTimeout = setTimeout( function() {
+			var delta = event.detail || -event.wheelDelta;
+			if( delta > 0 ) {
+				availableRoutes().down ? navigateDown() : navigateRight();
+			}
+			else {
+				availableRoutes().up ? navigateUp() : navigateLeft();
+			}
+		}, 100 );
+	}
 	
 	/**
 	 * Handler for the window level 'hashchange' event.
@@ -283,8 +293,8 @@ var Reveal = (function(){
 	        for( var i = 0, len = nodes.length; i < len; i++ ) {
 	            var node = nodes[i];
 	            
-	            if( node.textContent && ( !node.className || !node.className.match( /roll/g ) ) ) {
-	                node.className += ' roll';
+	            if( node.textContent && !node.querySelector( 'img' ) && ( !node.className || !node.classList.contains( node, 'roll' ) ) ) {
+	                node.classList.add( 'roll' );
 	                node.innerHTML = '<span data-title="'+ node.text +'">' + node.innerHTML + '</span>';
 	            }
 	        };
@@ -417,7 +427,7 @@ var Reveal = (function(){
 			// Enforce max and minimum index bounds
 			index = Math.max(Math.min(index, slides.length - 1), 0);
 			
-			slides[index].setAttribute('class', 'present');
+			slides[index].className = 'present';
 
 			for( var i = 0; i < slides.length; i++ ) {
 				var slide = slides[i];
@@ -430,11 +440,11 @@ var Reveal = (function(){
 
 				if( i < index ) {
 					// Any element previous to index is given the 'past' class
-					slide.setAttribute('class', 'past');
+					slide.className = 'past';
 				}
 				else if( i > index ) {
 					// Any element subsequent to index is given the 'future' class
-					slide.setAttribute('class', 'future');
+					slide.className = 'future';
 				}
 
 				// If this element contains vertical slides
@@ -529,14 +539,16 @@ var Reveal = (function(){
 	 * state. 
 	 */
 	function writeURL() {
-		var url = '/';
-		
-		// Only include the minimum possible number of components in
-		// the URL
-		if( indexh > 0 || indexv > 0 ) url += indexh;
-		if( indexv > 0 ) url += '/' + indexv;
-		
-		window.location.hash = url;
+		if( config.history ) {
+			var url = '/';
+			
+			// Only include the minimum possible number of components in
+			// the URL
+			if( indexh > 0 || indexv > 0 ) url += indexh;
+			if( indexv > 0 ) url += '/' + indexv;
+			
+			window.location.hash = url;
+		}
 	}
 
 	/**

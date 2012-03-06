@@ -873,7 +873,7 @@ padding: 0;
 }
 
 #triangle-down {
-	opacity:0.8;
+	opacity:0.6;
 	margin: auto;
 	margin-top: 1.2em;
 	width: 0;
@@ -882,8 +882,11 @@ padding: 0;
 	border-right: 50px solid transparent;
 	border-top: 50px solid #5de048;
 }
-#triangle-up {
+#triangle-down:hover {
 	opacity:0.8;
+}
+#triangle-up {
+	opacity:0.6;
 	margin: auto;
 	margin-top: 1.2em;
 	width: 0;
@@ -891,6 +894,9 @@ padding: 0;
 	border-left: 50px solid transparent;
 	border-right: 50px solid transparent;
 	border-bottom: 40px solid #5de048;
+}
+#triangle-up:hover {
+	opacity:0.8;
 }
 #star-five {
 	opacity:0.8;
